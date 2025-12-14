@@ -104,6 +104,43 @@ ourpassgen pin -l 8   # 8-digit PIN
 ourpassgen pin --no-clipboard  # Don't copy to clipboard
 ```
 
+## Library Usage
+
+You can also use this package as a library in your Node.js or React/Next.js applications.
+
+### Installation
+
+```bash
+npm install ourpassgen-cli
+```
+
+### Basic Usage
+
+```typescript
+import { generatePassword } from 'ourpassgen-cli';
+
+// Generate a default password (16 chars, letters/numbers/symbols)
+const password = generatePassword({ length: 16 });
+console.log(password);
+```
+
+### Advanced Usage
+
+```typescript
+import { generatePassword } from 'ourpassgen-cli';
+
+const password = generatePassword({
+  length: 24,
+  includeLowercase: true,
+  includeUppercase: true,
+  includeNumbers: true,
+  includeSymbols: true,
+  excludeAmbiguous: true // Exclude 'i', 'l', '1', 'L', 'o', '0', 'O'
+});
+```
+
+It uses `crypto.randomBytes` in Node.js and `window.crypto.getRandomValues` in browsers to ensuring cryptographically secure generation in both environments.
+
 ## Character Sets
 
 - **Lowercase**: `abcdefghijklmnopqrstuvwxyz`

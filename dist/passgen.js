@@ -6,47 +6,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const commander_1 = require("commander");
 const clipboardy_1 = __importDefault(require("clipboardy"));
-const crypto_1 = require("crypto");
+const index_1 = require("./index");
 const program = new commander_1.Command();
-// Character sets for password generation
-const CHAR_SETS = {
-    lowercase: 'abcdefghijklmnopqrstuvwxyz',
-    uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-    numbers: '0123456789',
-    symbols: '!@#$%^&*()_+-=[]{}|;:,.<>?',
-    ambiguous: 'il1Lo0O'
-};
-/**
- * Generate a secure random password
- * @param options - Password generation options
- * @returns Generated password
- */
-function generatePassword(options) {
-    const { length, includeLowercase = true, includeUppercase = true, includeNumbers = true, includeSymbols = false, excludeAmbiguous = false } = options;
-    let charset = '';
-    if (includeLowercase)
-        charset += CHAR_SETS.lowercase;
-    if (includeUppercase)
-        charset += CHAR_SETS.uppercase;
-    if (includeNumbers)
-        charset += CHAR_SETS.numbers;
-    if (includeSymbols)
-        charset += CHAR_SETS.symbols;
-    if (excludeAmbiguous) {
-        for (const char of CHAR_SETS.ambiguous) {
-            charset = charset.replace(new RegExp(char, 'g'), '');
-        }
-    }
-    if (charset.length === 0) {
-        throw new Error('No character sets selected for password generation');
-    }
-    let password = '';
-    const array = (0, crypto_1.randomBytes)(length);
-    for (let i = 0; i < length; i++) {
-        password += charset[array[i] % charset.length];
-    }
-    return password;
-}
 /**
  * Copy text to clipboard and show success message
  * @param text - Text to copy
@@ -87,7 +48,7 @@ function parseLength(lengthStr) {
 async function handlePasswordGeneration(options, passwordOptions) {
     try {
         const length = parseLength(options.length);
-        const password = generatePassword({
+        const password = (0, index_1.generatePassword)({
             length,
             includeLowercase: options.lowercase,
             includeUppercase: options.uppercase,

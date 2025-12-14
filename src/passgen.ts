@@ -2,28 +2,9 @@
 
 import { Command } from 'commander';
 import clipboardy from 'clipboardy';
-import { randomBytes } from 'crypto';
+import { generatePassword, PasswordOptions, CHAR_SETS } from './index';
 
 const program = new Command();
-
-// Character sets for password generation
-const CHAR_SETS = {
-  lowercase: 'abcdefghijklmnopqrstuvwxyz',
-  uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-  numbers: '0123456789',
-  symbols: '!@#$%^&*()_+-=[]{}|;:,.<>?',
-  ambiguous: 'il1Lo0O'
-} as const;
-
-// Type definitions
-interface PasswordOptions {
-  length: number;
-  includeLowercase: boolean;
-  includeUppercase: boolean;
-  includeNumbers: boolean;
-  includeSymbols: boolean;
-  excludeAmbiguous: boolean;
-}
 
 interface CommandOptions {
   length: string;
@@ -33,48 +14,6 @@ interface CommandOptions {
   symbols: boolean;
   excludeAmbiguous: boolean;
   copy: boolean;
-}
-
-/**
- * Generate a secure random password
- * @param options - Password generation options
- * @returns Generated password
- */
-function generatePassword(options: PasswordOptions): string {
-  const {
-    length,
-    includeLowercase = true,
-    includeUppercase = true,
-    includeNumbers = true,
-    includeSymbols = false,
-    excludeAmbiguous = false
-  } = options;
-
-  let charset = '';
-  
-  if (includeLowercase) charset += CHAR_SETS.lowercase;
-  if (includeUppercase) charset += CHAR_SETS.uppercase;
-  if (includeNumbers) charset += CHAR_SETS.numbers;
-  if (includeSymbols) charset += CHAR_SETS.symbols;
-  
-  if (excludeAmbiguous) {
-    for (const char of CHAR_SETS.ambiguous) {
-      charset = charset.replace(new RegExp(char, 'g'), '');
-    }
-  }
-
-  if (charset.length === 0) {
-    throw new Error('No character sets selected for password generation');
-  }
-
-  let password = '';
-  const array = randomBytes(length);
-  
-  for (let i = 0; i < length; i++) {
-    password += charset[array[i] % charset.length];
-  }
-
-  return password;
 }
 
 /**

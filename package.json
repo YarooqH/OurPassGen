@@ -1,16 +1,16 @@
 {
   "name": "ourpassgen-cli",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A CLI tool to generate secure random passwords and copy them to clipboard",
-  "main": "dist/passgen.js",
-  "types": "dist/passgen.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "bin": {
-    "ourpassgen": "./bin/passgen.js"
+    "ourpassgen": "./dist/passgen.js"
   },
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "start": "node bin/passgen.js",
+    "start": "node dist/passgen.js",
     "prepublishOnly": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
